@@ -3,11 +3,14 @@
     <h1>Weather</h1>
     <center>
     <div class="block1" v-if='show == true'>
-      Coordinates:{{pog.coord}} <br>
-      Temperature:{{pog.main.temp}} <br>
-      Pressure:{{pog.main.pressure}} <br>
-      Humidity:{{pog.main.humidity}} <br>
-      Wind speed:{{pog.wind.speed}} <br>
+      id:{{air.data.id}} <br>
+      From:{{air.data.cityFrom}} <br>
+      To:{{air.data.cityTo}} <br>
+      fly durations:{{air.data.fly_duration}} <br>
+      price:{{air.data.price}} <br>
+      routes:{{air.data.routes}} <br>
+     
+     
       <br>
       <button class="btn" @click="show = false">roll up</button>
       <br><br>
@@ -15,22 +18,24 @@
     </center>
     <br>
     <div else>
-      <input class="btn" type="text "  v-model="a">
-      <button class="btn" @click="p">Add city</button><br>
-      <br><select name="sel" id="sel" v-model="b">
+      <input class="btn" type="text"  v-model="city1">
+      <input class="btn" type="text"  v-model="city2">
+      <br><br><br>
+      <input class="btn" type="text"  v-model="date1">
+      <input class="btn" type="text"  v-model="date2">
+      <!-- <button class="btn" @click="p">Add city</button><br> <br>
+
+        <select name="sel" id="sel" v-model="b">
         <option disabled value="">choose</option>
-        <option v-for="city in cities" :key="city">{{city}}</option>
-      </select>
+        <option v-for="city in cities" :key="city">{{city}}</option> 
+
+      </select> -->
       <br>
       <br>
       <button class="btn" @click="q">Weather</button>
     </div>
   </div>
 </template>
-
-
-
-
 <script>
 
 import axios from 'axios'
@@ -39,23 +44,23 @@ export default {
   name: 'App',
   data() {
     return{
-        a:'',
-        cities:[],
-        b:'',
-        pog:[],
+     
+        city1:'',
+        city2:'',
+        date1:'',
+        date2:'',
+    
+        air:[],
         show: false
     }
   },
   
   methods: {
-    p: function(){
-      this.cities.push(this.a);
-    },
     q:function(){
-    axios.post('https://api.openweathermap.org/data/2.5/weather?q='+this.b+'&appid=b8d67052dc6c85fb12d75983c11d464b&units=metric')
+    axios.get('https://api.skypicker.com/flights?fly_from='+this.city1+'&fly_to='+this.city2+'&date_from='+this.date1+'&return_from='+this.date2+'&partner=picky')
       .then((response) => {
         console.log(response.data);
-        this.pog = response.data;
+        this.air = response.data;
         this.show = true;
       })
   },
