@@ -1,16 +1,13 @@
 <template>
   <div id="app">
     <h1>Weather</h1>
-    <center>
-    <div class="block1" v-if='show == true'>
-      id:{{air.data.id}} <br>
-      From:{{air.data.cityFrom}} <br>
-      To:{{air.data.cityTo}} <br>
-      fly durations:{{air.data.fly_duration}} <br>
-      price:{{air.data.price}} <br>
-      routes:{{air.data.routes}} <br>
-     
-     
+    <center v-if='show == true'>
+    <div class="block1" v-for="item in flights" v-bind:key="item.id">
+      From:{{item.cityFrom}} <br>
+      To:{{item.cityTo}} <br>
+      fly durations:{{item.fly_duration}} <br>
+      price:{{item.price}} <br>
+      routes:{{item.routes}} <br>
       <br>
       <button class="btn" @click="show = false">roll up</button>
       <br><br>
@@ -44,7 +41,7 @@ export default {
   name: 'App',
   data() {
     return{
-     
+        flights: [],
         city1:'',
         city2:'',
         date1:'',
@@ -60,7 +57,7 @@ export default {
     axios.get('https://api.skypicker.com/flights?fly_from='+this.city1+'&fly_to='+this.city2+'&date_from='+this.date1+'&return_from='+this.date2+'&partner=picky')
       .then((response) => {
         console.log(response.data);
-        this.air = response.data;
+        this.flights =  response.data.data.slice(1, 10);
         this.show = true;
       })
   },
